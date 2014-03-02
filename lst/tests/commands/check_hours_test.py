@@ -16,6 +16,8 @@ class CheckHoursTest(unittest.TestCase):
         mock_helper = MockHelper()
         mock_helper.user = [103]
         mock_helper.date = []
+        mock_helper.project = None
+
         data = mock_helper.get_mock_data('lst/tests/check_hours.json')
 
         # mock the zebra manager and its return values
@@ -27,7 +29,7 @@ class CheckHoursTest(unittest.TestCase):
         command.get_zebra_manager = MagicMock(return_value=zebra_manager)
 
         # verify the projects data returned
-        projects = command._get_projects(mock_helper.date, mock_helper.user)
+        projects = command._get_projects(mock_helper.date, mock_helper.user, mock_helper.project)
 
         self.assertEquals(2, len(projects), 'The should be 2 projects')
         self.assertTrue('A Project 1' == projects[0][0], 'Projects should be ordered alphabetically')

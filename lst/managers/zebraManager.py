@@ -18,11 +18,12 @@ class ZebraManager:
 
         return self.get_timesheets_by_url(report_url)
 
-    def get_all_timesheets(self, start_date=None, end_date=None, users=None):
+    def get_all_timesheets(self, start_date=None, end_date=None, users=None, projects=None):
         url = self._get_zebra_url_for_activities(
             start_date=start_date,
             end_date=end_date,
             users=users,
+            projects=projects,
             project_type_to_consider='all'
         )
 
@@ -159,9 +160,12 @@ class ZebraManager:
                 report_url += '&projects[]=*'
             elif type(projects) == list:
                 for project in projects:
-                    report_url += '&projects[]=' + `project`
+                    report_url += '&projects[]=' + str(project)
             else:
                 report_url += '&projects[]=' + str(projects)
+
+        if project_type_to_consider == 'all' and internal_projects == None:
+            internal_projects = projects
 
         if project_type_to_consider != 'external':
             if internal_projects is None:
@@ -174,5 +178,4 @@ class ZebraManager:
 
         report_url += '&start=' + str(start_date)
         report_url += '&end=' + str(end_date)
-
         return report_url

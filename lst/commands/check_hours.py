@@ -5,10 +5,10 @@ from lst.helpers import InputHelper, ArgParseHelper, ZebraHelper
 class CheckHoursCommand(BaseCommand):
     """
     Command to retrieve all Zebra hours for a specific date and/or user_id, and group them by project
-    Usage:  check-hours [-d date] [-u user_id]
-            check-hours [-d date] [-u user1_id user2_id]
+    Usage:  check-hours [-d date] [-u user1_id user2_id] [-p project1_id project2_id]
             check-hours [-u user_id]
             check-hours [-d date]
+            check-hours [-p project_id]
 
     """
     def add_command_arguments(self, subparsers):
@@ -17,18 +17,20 @@ class CheckHoursCommand(BaseCommand):
             "-d", "--date", nargs='*', help="format: -d dd.mm.yyyy. specify either one or two dates (-d start end)"
         )
         ArgParseHelper.add_user_argument(parser)
+        ArgParseHelper.add_project_argument(parser)
         return parser
 
     def run(self, args):
         # parse and verify user arguments
         users = InputHelper.sanitize_users(args.user)
         dates = InputHelper.sanitize_dates(args.date)
+        projects = InputHelper.sanitize_dates(args.project)
         InputHelper.ensure_max_2_dates(dates)
 
         # print output to console
-        self._output(self._get_projects(dates, users), users)
+        self._output(self._get_projects(dates, users, projects), users)
 
-    def _get_projects(self, dates, users):
+    def _get_projects(self, dates, users, projects):
         start_date, end_date = self.get_start_and_end_date(dates)
 
         # retrieve zebra data
@@ -36,6 +38,7 @@ class CheckHoursCommand(BaseCommand):
         zebra_entries = zebra_manager.get_all_timesheets(
             start_date=start_date,
             end_date=end_date,
+            projects=projects,
             users=users
         )
 

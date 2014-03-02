@@ -176,7 +176,14 @@ class ArgParseHelper(object):
             nargs='*',
             help="specify user id(s). Optional, multiple argument (multiple syntax: -u 111 123 145)"
         )
-
+    @classmethod
+    def add_project_argument(cls, parser):
+        parser.add_argument(
+            "-p",
+            "--project",
+            nargs='*',
+            help="specify project id(s). Optional, multiple argument (multiple syntax: -p 7 1313)"
+        )
     @classmethod
     def add_user_story_id_argument(cls, parser):
         parser.add_argument("story_id", help="specify user story id (ie. jlc-111)")
