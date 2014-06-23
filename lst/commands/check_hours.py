@@ -24,7 +24,7 @@ class CheckHoursCommand(BaseCommand):
         # parse and verify user arguments
         users = InputHelper.sanitize_users(args.user)
         dates = InputHelper.sanitize_dates(args.date)
-        projects = InputHelper.sanitize_dates(args.project)
+        projects = InputHelper.sanitize_projects(args.project)
         InputHelper.ensure_max_2_dates(dates)
 
         # print output to console

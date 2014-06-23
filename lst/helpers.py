@@ -25,6 +25,11 @@ class InputHelper(object):
         return [] if dates is None else dates
 
     @classmethod
+    def sanitize_projects(cls, projects):
+        """Ensure that we get either a list of dates or an empty list"""
+        return [] if projects is None else projects
+
+    @classmethod
     def check_nb_arguments(cls, args, minLimit=0, maxLimit=None):
         """Check that the number of arguments is within an definite range (raise an error if not)"""
         if len(args) > maxLimit or len(args) < minLimit:
